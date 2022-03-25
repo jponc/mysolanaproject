@@ -1,13 +1,13 @@
 [features]
 seeds = false
-[programs.localnet]
-mysolanaproject = "Fg6PaFpoGXkYsidMpWTK6W2BeZ7FEfcYkg476zPFsLnS"
+[programs.devnet]
+mysolanaproject = "487k1VT8MnQbPu3w3PV5LB1tYMshWhnHueR8J3FGPH5r"
 
 [registry]
 url = "https://anchor.projectserum.com"
 
 [provider]
-cluster = "localnet"
+cluster = "devnet"
 wallet = "/Users/julianalfonsoponce/.config/solana/id.json"
 
 [scripts]
