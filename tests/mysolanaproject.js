@@ -31,16 +31,23 @@ const main = async () => {
   let account = await program.account.baseAccount.fetch(baseAccount.publicKey);
   console.log("👀 GIF Count", account.totalGifs.toString());
 
-  // Add gif!
-  await program.rpc.addGif({
-    accounts: {
-      baseAccount: baseAccount.publicKey,
-    },
-  });
+  // Add gif, this includes the gif_link and the AddGif context that includes the user wallet so we can associate the gif to the user
+  await program.rpc.addGif(
+    "https://media3.giphy.com/media/d5RKDIduferh9jPNix/giphy.gif?cid=ecf05e4701a265862024722bdd4c8e407e290ca07ccfc172&rid=giphy.gif&ct=g",
+    {
+      accounts: {
+        baseAccount: baseAccount.publicKey,
+        user: provider.wallet.publicKey,
+      },
+    }
+  );
 
   // Get the account again to see what changed.
   account = await program.account.baseAccount.fetch(baseAccount.publicKey);
   console.log("👀 GIF Count", account.totalGifs.toString());
+
+  // Access gif_list on the account!
+  console.log("👀 GIF List", account.gifList);
 };
 
 const runMain = async () => {
