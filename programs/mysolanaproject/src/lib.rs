@@ -1,6 +1,6 @@
 use anchor_lang::prelude::*;
 
-declare_id!("AvGyfAqGcANu4neR4TjcxAQJ7Ghq8oXi4xA29etED6Lb");
+declare_id!("7KtMmq5We9ktjn7ZE4Tx7fvbSCB2Jj6f8A8rbrhYQmXv");
 
 #[program]
 pub mod mysolanaproject {
@@ -22,8 +22,10 @@ pub mod mysolanaproject {
 
         // Build the struct.
         let item = ItemStruct {
+            id: base_account.total_gifs.to_string(),
             gif_link: gif_link.to_string(),
             user_address: *user.to_account_info().key,
+            votes: 0,
         };
 
         // Add it to the gif_list vector
@@ -32,6 +34,19 @@ pub mod mysolanaproject {
         // Increment total gifs
         base_account.total_gifs += 1;
         Ok(())
+    }
+
+    pub fn vote_gif(ctx: Context<VoteGif>, id: String) -> Result<()> {
+        let base_account = &mut ctx.accounts.base_account;
+
+        for gif in &mut base_account.gif_list {
+            if gif.id == id {
+                gif.votes += 1;
+                return Ok(());
+            }
+        }
+
+        return Err(error!(MyError::VoteGif));
     }
 }
 
@@ -54,11 +69,22 @@ pub struct AddGif<'info> {
     pub user: Signer<'info>,
 }
 
+// This upvotes the GIF
+#[derive(Accounts)]
+pub struct VoteGif<'info> {
+    #[account(mut)]
+    pub base_account: Account<'info, BaseAccount>,
+    #[account(mut)]
+    pub user: Signer<'info>,
+}
+
 // Create a custom struct for us to work with
 #[derive(Debug, Clone, AnchorSerialize, AnchorDeserialize)]
 pub struct ItemStruct {
+    pub id: String,
     pub user_address: Pubkey,
     pub gif_link: String,
+    pub votes: u64,
 }
 
 // Tell Solana what we want to store on this account.
@@ -68,4 +94,10 @@ pub struct BaseAccount {
 
     // Attach a Vector of type ItemStruct to the account.
     pub gif_list: Vec<ItemStruct>,
+}
+
+#[error_code]
+pub enum MyError {
+    #[msg("This is an error message clients will automatically display")]
+    VoteGif,
 }

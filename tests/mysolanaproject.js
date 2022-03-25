@@ -27,26 +27,37 @@ const main = async () => {
 
   console.log("📝 Your transaction signature", tx);
 
-  // Fetch data from the account.
-  let account = await program.account.baseAccount.fetch(baseAccount.publicKey);
-  console.log("👀 GIF Count", account.totalGifs.toString());
-
   // Add gif, this includes the gif_link and the AddGif context that includes the user wallet so we can associate the gif to the user
-  await program.rpc.addGif(
-    "https://media3.giphy.com/media/d5RKDIduferh9jPNix/giphy.gif?cid=ecf05e4701a265862024722bdd4c8e407e290ca07ccfc172&rid=giphy.gif&ct=g",
-    {
-      accounts: {
-        baseAccount: baseAccount.publicKey,
-        user: provider.wallet.publicKey,
-      },
-    }
-  );
+  console.log("-----> Creating 2 GIFs");
+  await program.rpc.addGif("gif-url-0", {
+    accounts: {
+      baseAccount: baseAccount.publicKey,
+      user: provider.wallet.publicKey,
+    },
+  });
+
+  await program.rpc.addGif("gif-url-1", {
+    accounts: {
+      baseAccount: baseAccount.publicKey,
+      user: provider.wallet.publicKey,
+    },
+  });
 
   // Get the account again to see what changed.
   account = await program.account.baseAccount.fetch(baseAccount.publicKey);
-  console.log("👀 GIF Count", account.totalGifs.toString());
+  console.log("👀 GIF List", account.gifList);
 
-  // Access gif_list on the account!
+  // voting GIF 1
+  console.log("-----> Voting GIF 1");
+  await program.rpc.voteGif("1", {
+    accounts: {
+      baseAccount: baseAccount.publicKey,
+      user: provider.wallet.publicKey,
+    },
+  });
+
+  // Get the account again to see what changed.
+  account = await program.account.baseAccount.fetch(baseAccount.publicKey);
   console.log("👀 GIF List", account.gifList);
 };
 
