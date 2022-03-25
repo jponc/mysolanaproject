@@ -1,6 +1,6 @@
 use anchor_lang::prelude::*;
 
-declare_id!("487k1VT8MnQbPu3w3PV5LB1tYMshWhnHueR8J3FGPH5r");
+declare_id!("AvGyfAqGcANu4neR4TjcxAQJ7Ghq8oXi4xA29etED6Lb");
 
 #[program]
 pub mod mysolanaproject {
@@ -57,8 +57,8 @@ pub struct AddGif<'info> {
 // Create a custom struct for us to work with
 #[derive(Debug, Clone, AnchorSerialize, AnchorDeserialize)]
 pub struct ItemStruct {
-    pub gif_link: String,
     pub user_address: Pubkey,
+    pub gif_link: String,
 }
 
 // Tell Solana what we want to store on this account.

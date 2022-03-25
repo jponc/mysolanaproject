@@ -1,7 +1,7 @@
 [features]
 seeds = false
 [programs.devnet]
-mysolanaproject = "487k1VT8MnQbPu3w3PV5LB1tYMshWhnHueR8J3FGPH5r"
+mysolanaproject = "AvGyfAqGcANu4neR4TjcxAQJ7Ghq8oXi4xA29etED6Lb"
 
 [registry]
 url = "https://anchor.projectserum.com"
